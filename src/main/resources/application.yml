@@ -1,0 +1,21 @@
+server:
+  port: 8090
+  servlet:
+    context-path: /nova
+spring:
+  application:
+      name: novaRestService
+  datasource:
+    password: nova_rest_service
+    url: jdbc:postgresql://localhost:5432/novarestservice
+    username: nova_rest_service
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: https://suresh-nova-eureka-server.herokuapp.com/eureka
