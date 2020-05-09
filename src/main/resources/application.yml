@@ -6,9 +6,10 @@ spring:
   application:
       name: novaRestService
   datasource:
-    password: nova_rest_service
-    url: jdbc:postgresql://localhost:5432/novarestservice
-    username: nova_rest_service
+    driver-class-name: org.postgresql.Driver
+    password: d0eee00b2fd50e3d22cbdff533f4ef0d24f7011c8d8bb0ad96bf056afa3404e2
+    url: jdbc:postgresql://ec2-50-17-90-177.compute-1.amazonaws.com:5432/d6l3bl7ed3iu7o
+    username: ukmjzyezgyoufd
   jpa:
     properties:
       hibernate:
