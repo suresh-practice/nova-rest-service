@@ -16,7 +16,14 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
-eureka:
+feign:
   client:
-    serviceUrl:
-      defaultZone: https://suresh-nova-eureka-server.herokuapp.com/eureka
+    config:
+      NOVAMOCKSERVICE:
+        connectTimeout: 10000
+        readTimeout: 10000
+NOVAMOCKSERVICE:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: https://suresh-nova-rest-mock-service.herokuapp.com/

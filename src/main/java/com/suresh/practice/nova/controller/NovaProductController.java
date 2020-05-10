@@ -1,50 +1,51 @@
 package com.suresh.practice.nova.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.suresh.practice.nova.dto.NovaProductDto;
 import com.suresh.practice.nova.exception.NovaServiceException;
 import com.suresh.practice.nova.service.NovaProductService;
 
 @RestController
 @RequestMapping("/")
 public class NovaProductController {
-
-	private NovaProductService novaProductService;
 	
 	@Autowired
-	public NovaProductController(final NovaProductService novaProductServiceParam) {
-		this.novaProductService = novaProductServiceParam;
-	}
-	
-	@GetMapping(value = "/hello")
-	public String hello() {
-		return "All is well";
-	}
+	private NovaProductService novaProductService;
 
 	@GetMapping(value = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> fetchProduct(@PathVariable Long productId) throws NovaServiceException {
-		Map<String, Object> responseObject = new HashMap<>(1);
+	public @ResponseBody ResponseEntity<Object> fetchProduct(@PathVariable Long productId) throws NovaServiceException {
 		
-		long startTime = System.nanoTime();
+		JSONObject response = novaProductService.retrieveProductInfo(productId);
 		
-		List<NovaProductDto> prodList = novaProductService.retrieveProductInfo(productId);
+		return ResponseEntity.ok(response.toMap());
+	}
+	
+	@PostMapping(value = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<Object> storeProduct(@PathVariable Long productId, 
+			@RequestBody String productInfo) throws NovaServiceException {
 		
-		long timeElapsed = System.nanoTime() - startTime;
-		responseObject.put("results", prodList);
-		responseObject.put("executionTime", timeElapsed / 1000000 + " milliseconds");
+		JSONObject response = novaProductService.storeProductInfo(productId, productInfo);
 		
-		return new ResponseEntity<>(responseObject, HttpStatus.OK);
+		return ResponseEntity.ok(response.toMap());
+	}
+	
+	@PutMapping(value = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<Object> updateProduct(@PathVariable Long productId, 
+							@RequestBody String productInfo) throws NovaServiceException {
+		
+		JSONObject response = novaProductService.updateProductInfo(productId, productInfo);
+		
+		return ResponseEntity.ok(response.toMap());
 	}
 }
